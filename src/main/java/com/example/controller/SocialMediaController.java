@@ -26,7 +26,7 @@ public class SocialMediaController {
     @Autowired AccountService as;
     @Autowired MessageService ms;
 
-    @PostMapping(value = "register")
+    @PostMapping("register")
     public ResponseEntity register(@RequestBody Account acc){
         boolean nameExists = as.verifyAccount(acc.getUsername()) != null; //username exists
         boolean notValid = acc.getUsername().isBlank() || acc.getPassword().length() < 4; //username is blank or password less than 4
@@ -38,6 +38,16 @@ public class SocialMediaController {
         } else{ //account successfully was created in db
             Account savedAcc = as.createAccount(acc);
             return ResponseEntity.status(HttpStatus.OK).body(savedAcc);
+        }
+    }
+
+    @PostMapping("login")
+    public ResponseEntity login(@RequestBody Account acc){
+        Account verifiedAcc = as.verifyAccount(acc);
+        if (verifiedAcc != null) { //account details exist in db
+            return ResponseEntity.status(HttpStatus.OK).body(verifiedAcc);
+        } else{
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }

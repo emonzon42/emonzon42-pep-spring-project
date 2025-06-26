@@ -29,7 +29,13 @@ public class AccountService {
     }
 
     public Account verifyAccount(Account acc){
-        return verifyAccount(acc.getAccountId());
+        Optional<Account> optional = repo.findByAccountDetails(acc.getUsername(), acc.getPassword());
+
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            return null;
+        }
     }
 
     public Account verifyAccount(int account_id){

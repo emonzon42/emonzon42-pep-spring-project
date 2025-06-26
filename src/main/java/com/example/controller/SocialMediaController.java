@@ -36,7 +36,7 @@ public class SocialMediaController {
         } else if(notValid){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else{ //account successfully was created in db
-            Account savedAcc = as.createAccount(new Account(acc.getUsername(), acc.getPassword()));
+            Account savedAcc = as.createAccount(acc);
             return ResponseEntity.status(HttpStatus.OK).body(savedAcc);
         }
     }

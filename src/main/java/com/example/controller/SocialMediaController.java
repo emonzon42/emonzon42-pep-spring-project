@@ -41,7 +41,7 @@ public class SocialMediaController {
         }
     }
 
-    @PostMapping("login")
+    @PostMapping("login") 
     public ResponseEntity login(@RequestBody Account acc){
         Account verifiedAcc = as.verifyAccount(acc);
         if (verifiedAcc != null) { //account details exist in db

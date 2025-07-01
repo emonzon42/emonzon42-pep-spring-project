@@ -21,11 +21,11 @@ public class AccountService {
     }
 
     public Account createAccount(Account acc){
-        if(verifyAccount(acc.getUsername()) != null || acc.getUsername().isBlank() || acc.getPassword().length() < 4){
+        if (validateNewAccount(acc) == 1) {
+            return repo.save(acc); 
+        } else {
             return null;
-        } else{
-            return repo.save(acc);
-        }     
+        }    
     }
 
     public Account verifyAccount(Account acc){
@@ -56,4 +56,16 @@ public class AccountService {
         return repo.findAll();
     }
 
+    /*
+     * validates account as long it follows the following rules:
+     * username doesn't already exist
+     * username not blank
+     * password at least 4 characters
+     */
+    public byte validateNewAccount(Account acc){
+        if(verifyAccount(acc.getUsername()) != null ){ return -1;}
+        if (acc.getUsername().isBlank() ){ return -2; }
+        if( acc.getPassword().length() < 4){ return -3;}
+        return 1;
+    }
 }

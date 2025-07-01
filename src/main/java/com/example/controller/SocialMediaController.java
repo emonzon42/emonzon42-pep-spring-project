@@ -28,8 +28,8 @@ public class SocialMediaController {
 
     @PostMapping("register")
     public ResponseEntity register(@RequestBody Account acc){
-        boolean nameExists = as.verifyAccount(acc.getUsername()) != null; //username exists
-        boolean notValid = acc.getUsername().isBlank() || acc.getPassword().length() < 4; //username is blank or password less than 4
+        boolean nameExists = as.validateNewAccount(acc) == -1; //username exists
+        boolean notValid = as.validateNewAccount(acc) < -1; //username is blank or password less than 4
         
         if(nameExists) { 
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -49,5 +49,8 @@ public class SocialMediaController {
         } else{
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        
     }
+
+
 }

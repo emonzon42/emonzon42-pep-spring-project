@@ -39,7 +39,7 @@ public class AccountService {
     }
 
     public Account verifyAccount(int account_id){
-        Optional<Account> optional = repo.findById(Integer.toUnsignedLong(account_id));
+        Optional<Account> optional = repo.findByAccountID(account_id);
         
         if(optional.isPresent()){
             return optional.get();

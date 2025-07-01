@@ -3,8 +3,10 @@ package com.example.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.example.entity.Message;
@@ -16,11 +18,13 @@ import com.example.service.AccountService;
 @Service
 public class MessageService {
 
-    MessageRepository repo;
+    public MessageRepository repo;
+    public AccountService accountService;
 
     @Autowired
-    public MessageService(MessageRepository repository){
+    public MessageService(MessageRepository repository, AccountService accountService){
         this.repo = repository;
+        this.accountService = accountService;
     }
 
     public Message createMessage(Message msg){
@@ -63,20 +67,18 @@ public class MessageService {
     /*
      * validates a new message in db by returning a '1'
      * if any of these invalidation conditions are met then it will return the corresponding number:
-     * -1: message isnt blank
-     * -2: message is less than 255 characters
-     * -3: posted_by refers to real user in db
+     * -1: message is blank
+     * -2: message is greater than 255 characters
+     * -3: posted_by doesn't refers to real user in db
      */
     public byte validateNewMessage(Message msg){
-        ApplicationContext context = new ClassPathXmlApplicationContext();
-
-        if (!msg.getMessageText().isBlank() ){
+        if (msg.getMessageText().isBlank()){
             return -1;
         }
-        else if (msg.getMessageText().length() < 255 ){
+        if (msg.getMessageText().length() > 255 ){
             return -2;
         }
-        else if (new AccountService((AccountRepository) context.getBean("AccountRepository")).verifyAccount(msg.getPostedBy()) != null){
+        if (accountService.verifyAccount(msg.getPostedBy()) == null){
             return -3;
         }
         return 1;

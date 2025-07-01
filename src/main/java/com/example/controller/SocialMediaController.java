@@ -52,5 +52,14 @@ public class SocialMediaController {
         
     }
 
+    @PostMapping("messages")
+    public ResponseEntity create(@RequestBody Message msg){
+        if (ms.validateNewMessage(msg) == 1) {//message successfully validated and will be created
+            return ResponseEntity.status(HttpStatus.OK).body(ms.createMessage(msg));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
 
 }

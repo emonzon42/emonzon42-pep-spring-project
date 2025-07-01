@@ -1,6 +1,7 @@
 package com.example.service;
 
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,7 @@ public class MessageService {
     }
     
     public Message findMessage(int message_id){
-        Optional<Message> optional = repo.findById((long) message_id);
+        Optional<Message> optional = repo.findByMessageID(message_id);
 
         if (optional.isPresent()) {
             return optional.get();
@@ -46,6 +47,10 @@ public class MessageService {
 
     public Message findMessage(Message msg){
         return findMessage(msg.getMessageId());
+    }
+
+    public List<Message> findAllMessages(){
+        return repo.findAll();
     }
 
     /*

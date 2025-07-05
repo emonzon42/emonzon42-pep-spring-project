@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import com.example.entity.Account;
 import com.example.entity.Message;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
@@ -74,6 +76,17 @@ public class SocialMediaController {
         return ResponseEntity.status(HttpStatus.OK).body(ms.findMessage(messageId));
     }
 
+    @PatchMapping("messages/{messageId}")
+    public ResponseEntity patch(@PathVariable Integer messageId, @RequestBody JsonNode json){
+        String messageText = json.path("messageText").asText();
+        byte result = ms.editMessage(messageId, messageText);
+
+        if (result > 0) {//message succesfully found and deleted
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
     @DeleteMapping("messages/{messageId}")
     public ResponseEntity delete(@PathVariable Integer messageId){

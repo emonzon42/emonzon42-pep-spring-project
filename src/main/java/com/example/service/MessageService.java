@@ -35,7 +35,7 @@ public class MessageService {
     }
 
     public Message createMessage(Message msg){
-        if (validateNewMessage(msg) != 1) {
+        if (validateNewMessage(msg) != MESSAGE_VALID) {
             return null;
         }
         return repo.save(msg);
@@ -59,11 +59,18 @@ public class MessageService {
         return repo.findAll();
     }
 
-    public Message editMessage(Message msg){
-        if(findMessage(msg) != null && validateMessage(msg) == 1){ //message exists in db and meets validation rules
-            return repo.updateMessage(msg.getMessageId(), msg.getMessageText());
+    /*
+     * updates a message if it exists in the db 
+     * returns '1' if message was valid and was successfully updated
+     * '0' if original message wasn't found or valid
+     */
+    
+        public byte editMessage(Integer messageId, String messageText){
+        if(findMessage(messageId) != null && validateMessage(messageText) == MESSAGE_VALID){ //message exists in db and meets validation rules
+            repo.updateMessage(messageId, messageText);
+            return 1; 
         }
-        return null;
+        return 0;
     }
 
     
@@ -106,6 +113,10 @@ public class MessageService {
         }
         
         return MESSAGE_VALID;
+    }
+
+    public byte validateMessage(String msgText){
+        return validateMessage(new Message(null, msgText, null));
     }
 
     /* 

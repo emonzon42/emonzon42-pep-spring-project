@@ -10,12 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.entity.Message;
 
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long>{
 
     @Query("FROM Message WHERE messageId = :messageId")
     Optional<Message> findByMessageID(@Param("messageId") Integer messageId);
+
+    @Query("FROM Message WHERE postedBy = :postedBy")
+    List<Message> findAllByPosterID(@Param("postedBy") Integer postedBy);
 
     @Modifying 
     @Transactional

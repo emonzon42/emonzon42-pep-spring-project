@@ -59,6 +59,10 @@ public class MessageService {
         return repo.findAll();
     }
 
+    public List<Message> findAllMessagesBy(Integer user){
+        return repo.findAllByPosterID(user);
+    }
+
     /*
      * updates a message if it exists in the db 
      * returns '1' if message was valid and was successfully updated

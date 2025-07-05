@@ -76,8 +76,13 @@ public class SocialMediaController {
         return ResponseEntity.status(HttpStatus.OK).body(ms.findMessage(messageId));
     }
 
+    @GetMapping("accounts/{accountId}/messages")
+    public ResponseEntity getAllMessagesByAccountID(@PathVariable Integer accountId){
+        return ResponseEntity.status(HttpStatus.OK).body(ms.findAllMessagesBy(accountId));
+    }
+
     @PatchMapping("messages/{messageId}")
-    public ResponseEntity patch(@PathVariable Integer messageId, @RequestBody JsonNode json){
+    public ResponseEntity patchMessage(@PathVariable Integer messageId, @RequestBody JsonNode json){
         String messageText = json.path("messageText").asText();
         byte result = ms.editMessage(messageId, messageText);
 
@@ -89,7 +94,7 @@ public class SocialMediaController {
     }
 
     @DeleteMapping("messages/{messageId}")
-    public ResponseEntity delete(@PathVariable Integer messageId){
+    public ResponseEntity deleteMessage(@PathVariable Integer messageId){
         byte result = ms.deleteMessage(messageId);
         
         if (result > 0) {//message succesfully found and deleted

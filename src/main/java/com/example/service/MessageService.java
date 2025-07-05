@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -53,18 +54,19 @@ public class MessageService {
         return repo.findAll();
     }
 
+    
     /*
      * deletes a message if it exists in the db 
      * returns '1' if message existed and was successfully deleted
      * '0' if message wasn't found
      */
     public byte deleteMessage(int message_id){
-        Optional<Message> optional = repo.findById((long) message_id);
+        Optional<Message> optional = repo.findByMessageID(message_id);
 
         if (optional.isPresent()) {
-            repo.deleteById((long) message_id);
+            repo.deleteByMessageID(message_id);
             return 1;
-        } else {
+        } else { 
             return 0;
         }
     }

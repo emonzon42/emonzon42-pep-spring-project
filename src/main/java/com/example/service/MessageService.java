@@ -41,8 +41,8 @@ public class MessageService {
         return repo.save(msg);
     }
     
-    public Message findMessage(int message_id){
-        Optional<Message> optional = repo.findByMessageID(message_id);
+    public Message findMessage(int messageId){
+        Optional<Message> optional = repo.findByMessageID(messageId);
 
         if (optional.isPresent()) {
             return optional.get();
@@ -79,11 +79,11 @@ public class MessageService {
      * returns '1' if message existed and was successfully deleted
      * '0' if message wasn't found
      */
-    public byte deleteMessage(int message_id){
-        Optional<Message> optional = repo.findByMessageID(message_id);
+    public byte deleteMessage(int messageId){
+        Optional<Message> optional = repo.findByMessageID(messageId);
 
         if (optional.isPresent()) {
-            repo.deleteByMessageID(message_id);
+            repo.deleteByMessageID(messageId);
             return 1;
         } else { 
             return 0;

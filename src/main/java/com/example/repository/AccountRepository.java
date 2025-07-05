@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.example.entity.Account;
 
+@Repository
 public interface AccountRepository extends JpaRepository<Account, Long>{
 
     @Query("FROM Account WHERE username = :username")

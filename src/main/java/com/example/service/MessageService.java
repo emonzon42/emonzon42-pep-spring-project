@@ -54,6 +54,13 @@ public class MessageService {
         return repo.findAll();
     }
 
+    public Message editMessage(Message msg){
+        if(findMessage(msg) != null && validateMessage(msg) == 1){ //message exists in db and meets validation rules
+            return repo.updateMessage(msg.getMessageId(), msg.getMessageText());
+        }
+        return null;
+    }
+
     
     /*
      * deletes a message if it exists in the db 
@@ -79,16 +86,34 @@ public class MessageService {
      * -3: posted_by doesn't refers to real user in db
      */
     public byte validateNewMessage(Message msg){
+        return validateMessagePoster(msg);
+    }
+
+    /*
+     * validates that message meets rules for posting/db storage
+     */
+    public byte validateMessage(Message msg){
         if (msg.getMessageText().isBlank()){
             return -1;
         }
         if (msg.getMessageText().length() > 255 ){
             return -2;
         }
-        if (accountService.verifyAccount(msg.getPostedBy()) == null){
-            return -3;
-        }
+        
         return 1;
     }
+
+    /* 
+     * validates if message is associated by a real account in db
+     * works in tandem with validateMessage
+     */
+    public byte validateMessagePoster(Message msg){
+        if (accountService.verifyAccount(msg.getPostedBy()) == null){
+            return -3;
+        } else {
+            return validateMessage(msg);
+        }
+    }
+
     
 }

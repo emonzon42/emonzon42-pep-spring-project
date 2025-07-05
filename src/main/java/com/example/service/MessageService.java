@@ -20,8 +20,13 @@ import com.example.service.AccountService;
 @Service
 public class MessageService {
 
-    public MessageRepository repo;
-    public AccountService accountService;
+    private MessageRepository repo;
+    private AccountService accountService;
+
+    public final byte MESSAGE_VALID = 1;
+    public final byte MESSAGE_IS_BLANK = -1;
+    public final byte MESSAGE_TOO_LONG = -2;
+    public final byte MESSAGE_POSTER_DOESNT_EXIST = -3;
 
     @Autowired
     public MessageService(MessageRepository repository, AccountService accountService){
@@ -94,13 +99,13 @@ public class MessageService {
      */
     public byte validateMessage(Message msg){
         if (msg.getMessageText().isBlank()){
-            return -1;
+            return MESSAGE_IS_BLANK;
         }
         if (msg.getMessageText().length() > 255 ){
-            return -2;
+            return MESSAGE_TOO_LONG;
         }
         
-        return 1;
+        return MESSAGE_VALID;
     }
 
     /* 
@@ -109,7 +114,7 @@ public class MessageService {
      */
     public byte validateMessagePoster(Message msg){
         if (accountService.verifyAccount(msg.getPostedBy()) == null){
-            return -3;
+            return MESSAGE_POSTER_DOESNT_EXIST;
         } else {
             return validateMessage(msg);
         }

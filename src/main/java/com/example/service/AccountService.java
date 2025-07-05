@@ -38,8 +38,8 @@ public class AccountService {
         }
     }
 
-    public Account verifyAccount(int account_id){
-        Optional<Account> optional = repo.findByAccountID(account_id);
+    public Account verifyAccount(int accountId){
+        Optional<Account> optional = repo.findByAccountID(accountId);
         
         if(optional.isPresent()){
             return optional.get();
